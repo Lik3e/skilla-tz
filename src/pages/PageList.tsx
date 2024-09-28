@@ -48,7 +48,9 @@ const PageList = () => {
                     if (sort === "duration-down") {
                         return a.time - b.time
                       }
-                  })
+                      return null
+                  }
+                )
             }
         setList(data.results);
         });
@@ -106,15 +108,17 @@ const PageList = () => {
 
     return(
         <div className="container">
-            <Filter 
-            onChangeIncoming={handleChangeIncoming}
-             onChangeDate={handleChangeDate} 
-             onPickDate={handlePickDate} 
-             date_end={filters.date_end}
-             date_start={filters.date_start}
-              />
-            <div className="list-container">
-                <List items={list} onSort={(e: string) => setSort(e)} sortBy={sort} />
+            <div>
+                <Filter 
+                onChangeIncoming={handleChangeIncoming}
+                onChangeDate={handleChangeDate} 
+                onPickDate={handlePickDate} 
+                date_end={filters.date_end}
+                date_start={filters.date_start}
+                />
+                <div className="list-container">
+                    <List items={list || []} onSort={(e: string) => setSort(e)} sortBy={sort} />
+                </div>
             </div>
         </div>
     )
