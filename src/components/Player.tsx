@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { durationToTime } from "./List/ListItem";
 
 const url = "https://api.skilla.ru/mango/getRecord?"
@@ -7,6 +7,8 @@ const Player = (props: any) => {
     const [play, setPlay] = useState(true)
     const [playRecord, setPlayRecord] = useState<any>()
     const item = props.props
+    const road = useRef<number[]>([])
+    let widthCalc = 175/25
     const ctx = new AudioContext();
     let audio: any;
 
@@ -47,7 +49,12 @@ const Player = (props: any) => {
 
       const stopback = () => {
         playRecord.stop(0)
+        road.current = []
         setPlay(true)
+      }
+
+      const onChooseTime = (i: number) => {
+        console.log(i)
       }
 
       const downloadRecord = () => {
@@ -63,7 +70,29 @@ const Player = (props: any) => {
             <div className="play" onClick={() => playback()}><span></span></div>
             : <div className="pause" onClick={() => stopback()}><span></span></div>
         }
-        <div className="play-road"></div>
+        <div className="play-road">
+          {!!playRecord?.buffer ?
+          <div className="road-duration">
+            {
+              road.current.map(item => {
+                return(
+                  <span
+                  style={{
+                    width: widthCalc,
+                  }}  
+                  key={`${item}-sec`} onClick={() => onChooseTime(item)}>
+
+                  </span>
+                )
+              })
+            }
+
+
+          </div>
+          : null
+          }
+
+        </div>
         <div className="download-record" onClick={() => downloadRecord()}></div>
         <div className="close-play"></div>
     </div>
